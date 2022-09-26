@@ -25,13 +25,36 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+.breadcrumb > li:not(.active) {
+    cursor:pointer !important;
+}
+
+a {
+  color:#90CAF9 !important;
+}
+
+h1 {
+  color: #FFF;
+}
+
 .row-file {
-  height: 40px;
+  height: 44px;
 }
 
 .column-icon {
-  width: 40px;
+  width: 44px;
   text-align: center;
+}
+
+.column-img {
+  text-align:center;
+  width:160px;
+}
+
+.column-img img {
+  display:inline-block;
+  margin:0 auto;
+  width:160px;
 }
 
 .column-name {
@@ -43,12 +66,12 @@
 }
 
 .column-move {
-  width: 40px;
+  width: 44px;
   text-align: center;
 }
 
 .column-delete {
-  width: 40px;
+  width: 44px;
   text-align: center;
 }
 
@@ -60,7 +83,7 @@
 }
 
 .footer {
-  color: #999;
+  color: #EFEFEF;
   text-align: center;
   font-size: 0.9em;
 }
@@ -104,11 +127,16 @@
   background-color: transparent;
   border-radius: 0px;
   margin-bottom: 0px;
-  padding: 0px;
 }
 
 .breadcrumb > .active {
-  color: #555;
+  color: #000 !important;
+  background: #FFF !important;
+  padding: 4px 8px !important;
+  border-radius: 16px !important;
+  text-shadow: none !important;
+  font-weight: 500 !important;
+  margin-left: 0.4em !important;
 }
 
 .breadcrumb > li + li:before {

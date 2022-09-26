@@ -66,7 +66,13 @@ NS_ASSUME_NONNULL_END
 
 - (instancetype)initWithUploadDirectory:(NSString*)path {
   if ((self = [super init])) {
-    NSString* bundlePath = [[NSBundle bundleForClass:[GCDWebUploader class]] pathForResource:@"GCDWebUploader" ofType:@"bundle"];
+#if SWIFT_PACKAGE
+    NSBundle* bundle = SWIFTPM_MODULE_BUNDLE;
+#else
+    NSBundle* bundle = [NSBundle bundleForClass:[GCDWebUploader class]];
+#endif
+
+    NSString* bundlePath = [bundle pathForResource:@"GCDWebUploader" ofType:@"bundle"];
     if (bundlePath == nil) {
       return nil;
     }
@@ -245,14 +251,20 @@ NS_ASSUME_NONNULL_END
 
   NSMutableArray* array = [NSMutableArray array];
   for (NSString* item in [contents sortedArrayUsingSelector:@selector(localizedStandardCompare:)]) {
+    if ([item isEqual: @"com.scottjulian.moocow.settings"]) { continue; }
     if (_allowHiddenItems || ![item hasPrefix:@"."]) {
       NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:[absolutePath stringByAppendingPathComponent:item] error:NULL];
       NSString* type = [attributes objectForKey:NSFileType];
+
+      NSString *imgURLString = [[relativePath stringByAppendingPathComponent:item] stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+      imgURLString = [imgURLString substringFromIndex:1];
+      
       if ([type isEqualToString:NSFileTypeRegular] && [self _checkFileExtension:item]) {
         [array addObject:@{
           @"path" : [relativePath stringByAppendingPathComponent:item],
           @"name" : item,
-          @"size" : (NSNumber*)[attributes objectForKey:NSFileSize]
+          @"size" : (NSNumber*)[attributes objectForKey:NSFileSize],
+          @"img"  : [@"/thumbnails?name=" stringByAppendingString:imgURLString]
         }];
       } else if ([type isEqualToString:NSFileTypeDirectory]) {
         [array addObject:@{
